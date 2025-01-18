@@ -1,8 +1,6 @@
 package com.hszg.demo.data.impl;
 
 import com.hszg.demo.data.api.TaskManager;
-import com.hszg.demo.model.student.Student;
-import com.hszg.demo.model.task.Task;
 import org.apache.commons.dbcp.BasicDataSource;
 
 import java.sql.Connection;
@@ -36,24 +34,6 @@ public class PostgresTaskManagerImpl implements TaskManager  {
 
 
 
-    @Override
-    public List<Task> getAllTasks(String email) {
-        return null;
-    }
-
-    @Override
-    public void addTask(Task task, Student student) {
-
-        Statement stmt = null;
-        Connection connection = null;
-
-
-    }
-
-    @Override
-    public void deleteTask(String name, Student student) {
-
-    }
 
     public void createTableTask() {
 
