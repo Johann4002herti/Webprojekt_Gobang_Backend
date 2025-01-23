@@ -1,5 +1,6 @@
 package com.hszg.demo.model.game;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ public class Board {
     }
 
     private void fillBoard(){
+        this.tiles = new ArrayList<Tile>();
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 tiles.add(new Tile("empty",x,y));
