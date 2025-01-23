@@ -33,7 +33,7 @@ public class Game {
     @JsonProperty("BenefitSharing")
     private Boolean benefitSharing;
     @JsonProperty("GameStatus")
-    private String gameStatus;
+    private String gameStatus;  //"isFull", "PlayerOneWon", "PlayerTwoWon", "isRunning", "Error"
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
@@ -52,6 +52,15 @@ public class Game {
         this.type = type;
         this.benefitSharing = benefitSharing;
         this.gameStatus = gameStatus;
+    }
+    public Game(String gameCode, int size, String type, Boolean benefitSharing) {
+        super();
+        this.gameCode = gameCode;
+        this.playerOnesTurn = true;
+        this.board = new Board(size);
+        this.type = type;
+        this.benefitSharing = benefitSharing;
+        this.gameStatus = "isRunning";
     }
 
     @JsonProperty("GameCode")
@@ -123,6 +132,28 @@ public class Game {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
+
+    public void makeMove(Tile tile){
+        Tile t = board.getTileAt(tile.getxCoordinate(), tile.getyCoordinate());
+            if(playerOnesTurn)      t.setStatus("PlayerOne");
+            else                    t.setStatus("PlayerTwo");
+            checkGameStatus(t);
+            playerOnesTurn = !playerOnesTurn;
+        }
+
+    private void checkGameStatus(Tile tile){
+
+        if(board.checkWhoWon(tile) != null){
+            gameStatus = board.checkWhoWon(tile);
+        }
+        else if(board.checkIsFull()){
+            gameStatus = "isFull";
+        }
+        else {
+            gameStatus = "isRunning";
+        }
+    }
+
 
     @Override
     public String toString() {

@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class Tile {
 
     @JsonProperty("Status")
-    private String status;
+    private String status;      //"playerOne", "playerTwo", "empty"
     @JsonProperty("x-coordinate")
     private Integer xCoordinate;
     @JsonProperty("y-coordinate")

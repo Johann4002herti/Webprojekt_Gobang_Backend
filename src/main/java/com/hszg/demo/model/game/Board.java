@@ -39,6 +39,19 @@ public class Board {
         this.tiles = tiles;
     }
 
+    public Board(Integer size) {
+        this.size = size;
+        fillBoard();
+    }
+
+    private void fillBoard(){
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                tiles.add(new Tile("empty",x,y));
+            }
+        }
+    }
+
     @JsonProperty("Size")
     public Integer getSize() {
         return size;
@@ -67,6 +80,99 @@ public class Board {
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
+    }
+    
+    public String checkWhoWon(Tile tile){
+        int x = tile.getxCoordinate();
+        int y = tile.getyCoordinate();
+        int whoHasWon = 0;
+        int player = 0;
+        Tile t = getTileAt(x,y);
+                if(t.getStatus().equals("playerOne")){
+                    player = 1;
+                }
+                else if(t.getStatus().equals("playerTwo")){
+                    player = 2;
+                }
+                else {
+                    player = 0;
+                }
+
+        if (player !=0){
+            //Diagonal
+            if (count(player, x, y, 1, 1) + count(player, x, y, -1, -1) + 1 >= 5){
+                whoHasWon=player;
+            }
+            //Diagonal
+            else if (count(player, x, y, -1, 1) + count(player, x, y, 1, -1) + 1 >= 5){
+                whoHasWon=player;
+            }
+            //Horizontal
+            else if (count(player, x, y, 0, 1) + count(player, x, y, 0, -1) + 1 >= 5){
+                whoHasWon=player;
+            }
+            //Vertical
+            else if (count(player, x, y, 1, 0) + count(player, x, y, -1, 0) + 1 >= 5){
+                whoHasWon=player;
+            }
+        }
+
+        if (whoHasWon == 1){
+            return "PlayerOneWon";
+        }
+        else if (whoHasWon == 2){
+            return "PlayerTwoWon";
+        }
+        else {
+            return null;
+        }
+    }
+
+    //An auxiliary Function to help the method "void isWon(int y)""
+    int count(int player, int xToCheck, int yToCheck, int xDirection, int yDirection){
+    int numberOfRows = size;
+    int numberOfColumns = size;
+    int count = 0;
+    String playerString;
+    if (player == 1){
+        playerString = "playerOne";
+    }
+    else if (player == 2){
+        playerString = "playerTwo";
+    }
+    else {
+        playerString = "empty";
+    }
+    while (true)
+    {
+        xToCheck += xDirection;
+        yToCheck += yDirection;
+        if (xToCheck < 0 || yToCheck < 0 || xToCheck >= numberOfRows || yToCheck >= numberOfColumns)
+            break;
+        if (getTileAt(xToCheck,yToCheck).getStatus().equals(player))
+            count++;
+        else
+            break;
+    }
+    return count;
+    }
+
+    public boolean checkIsFull(){
+        for (Tile t : tiles) {
+            if (t.getStatus().equals("empty")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Tile getTileAt(int x, int y){
+        for (Tile t : tiles) {
+            if(t.getxCoordinate() == x && t.getyCoordinate() == y){
+                return t;
+            }
+        }
+        return tiles.get(0);
     }
 
     @Override

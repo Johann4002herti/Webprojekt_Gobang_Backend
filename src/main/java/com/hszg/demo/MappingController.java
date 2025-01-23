@@ -37,9 +37,29 @@ public class MappingController {
         Logger myLogger = Logger.getLogger("CreateTaskLogger");
         myLogger.info("Received a POST request on game with gameCode " + game.getGameCode());
 
+        Game g = new Game(game.getGameCode(), game.getBoard().getSize(), game.getType(), game.getBenefitSharing());
+
         String gameCode = game.getGameCode();
         MessageAnswer myAnswer = new MessageAnswer();
         myAnswer.setMessage("Started Game with Gamecode: " + gameCode );
+        return
+                myAnswer;
+    }
+
+    @PutMapping(
+            path = "/game/board/tiles",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public MessageAnswer makeMove(@RequestBody Tile tile, Game game) {
+
+        Logger myLogger = Logger.getLogger("CreateTaskLogger");
+        myLogger.info("Received a PUT request on game with gameCode " + game.getGameCode());
+
+        game.makeMove(tile);
+
+        MessageAnswer myAnswer = new MessageAnswer();
+        myAnswer.setMessage("made a move at Tile: " + tile +"new GameStatus: " + game.getGameStatus());
         return
                 myAnswer;
     }
