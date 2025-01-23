@@ -47,7 +47,7 @@ public class MappingController {
     }
 
     @PutMapping(
-            path = "/game/board/tiles",
+            path = "/board/tiles",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseStatus(HttpStatus.OK)
