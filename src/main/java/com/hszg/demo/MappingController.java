@@ -46,6 +46,23 @@ public class MappingController {
                 myAnswer;
     }
 
+    @GetMapping("/game")
+    @ResponseStatus(HttpStatus.OK)
+    public Game seeBoard(@RequestParam("GameCode") String gameCode){
+
+        Logger myLogger = Logger.getLogger("SeeBoardLogger");
+        myLogger.info("Received a GET request on game with token " + gameCode);
+
+        Game game;
+
+        //TODO get Game with Gamecode von properties
+
+        game = new Game(gameCode, 16, "Gobang", true);
+
+        return game;
+    }
+
+
     @PutMapping(
             path = "/board/tiles",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
