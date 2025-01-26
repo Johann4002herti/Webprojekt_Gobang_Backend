@@ -136,9 +136,9 @@ public class PropertyFileGameManagerImpl implements GameManager {
         Game g = new Game("Test",15,"Gobang", true);
         PropertyFileGameManagerImpl fileGameManager = getPropertyFileGameManagerImpl("src/main/resources/GameList.properties");
 
+        //fileGameManager.storeGame(g);
+        System.out.println(fileGameManager.getGame(g.getGameCode()));
         fileGameManager.deleteGame(g.getGameCode());
-        /*fileGameManager.storeGame(g);
-        System.out.println(fileGameManager.getGame(g.getGameCode()));*/
 
     }
 }

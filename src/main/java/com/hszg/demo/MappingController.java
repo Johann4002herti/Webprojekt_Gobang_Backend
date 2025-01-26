@@ -38,7 +38,10 @@ public class MappingController {
         Game g = new Game(game.getGameCode(), game.getBoard().getSize(), game.getType(), game.getBenefitSharing());
         propertyFileGameManager.storeGame(g);
 
-        String gameCode = game.getGameCode();
+        Logger myLogger2 = Logger.getLogger("HostGameLogger");
+        myLogger2.info("Game:" + g );
+
+        String gameCode = g.getGameCode();
         MessageAnswer myAnswer = new MessageAnswer();
         myAnswer.setMessage("Started Game with Gamecode: " + gameCode );
         return
