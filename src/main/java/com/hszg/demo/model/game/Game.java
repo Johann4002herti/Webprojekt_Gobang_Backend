@@ -195,4 +195,15 @@ public class Game {
         return sb.toString();
     }
 
+    public static void main(String[] args) {
+        Game game = new Game("Test",15,"Gobang",true);
+
+        game.makeMove(new Tile("empty",0,0));
+        game.makeMove(new Tile("empty",1,0));
+
+        System.out.println(game.getBoard().getTileAt(0,0));
+        System.out.println(game.getBoard().getTileAt(1,0));
+        System.out.println(game.getBoard().getTileAt(1,1));
+    }
+
 }

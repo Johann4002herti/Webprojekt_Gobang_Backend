@@ -76,7 +76,8 @@ public class MappingController {
                                   @RequestBody Game game) {
 
         Logger myLogger = Logger.getLogger("MakeMoveLogger");
-        myLogger.info("Received a PUT request on game with gameCode " + game.getGameCode());
+        myLogger.info("Received a PUT request on game with gameCode " + game.getGameCode() +
+                "and coordinates: x: "+x+", y: "+y);
 
         Tile tile = game.getBoard().getTileAt(x,y);
         game.makeMove(tile);
