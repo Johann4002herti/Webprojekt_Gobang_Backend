@@ -9,21 +9,22 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
 public class PropertyFileGameManagerImpl implements GameManager {
 
     String fileName;
-    PropertyFileTileManagerImpl tileManager;
+    //PropertyFileTileManagerImpl tileManager;
 
     static PropertyFileGameManagerImpl propertyFileGameManager = null;
 
     private PropertyFileGameManagerImpl(String fileName) {
         this.fileName = fileName;
-        String tileName = fileName.substring(0, fileName.lastIndexOf('/')+1);
+        /*String tileName = fileName.substring(0, fileName.lastIndexOf('/')+1);
         tileName += "TileList.properties";
-        this.tileManager =PropertyFileTileManagerImpl.getPropertyFileTileManagerImpl(tileName);
+        this.tileManager =PropertyFileTileManagerImpl.getPropertyFileTileManagerImpl(tileName);*/
     }
 
     static public PropertyFileGameManagerImpl getPropertyFileGameManagerImpl(String fileName) {
@@ -92,8 +93,9 @@ public class PropertyFileGameManagerImpl implements GameManager {
                     tiles.add(new Tile(
                             properties.getProperty("Tile." + i + "."+ j +".Status"),
                             Integer.parseInt(properties.getProperty("Tile." + i + "."+ j +".x")),
-                            Integer.parseInt(properties.getProperty("Tile." + i + "."+ j +".x"))
+                            Integer.parseInt(properties.getProperty("Tile." + i + "."+ j +".y"))
                     ));
+
                     j++;
                 }
                 String type = properties.getProperty("Game." + i + ".Type");
@@ -120,11 +122,23 @@ public class PropertyFileGameManagerImpl implements GameManager {
     @Override
     public void deleteGame(String gameCode) {
         List<Game> games = getAllGames();
+        List<Game> toRemove = new ArrayList<>();
         for (Game game : games) {
             if (game.getGameCode().equals(gameCode)) {
-                games.remove(game);
+                toRemove.add(game);
             }
         }
+        games.removeAll(toRemove);
         storeAllGames(games);
+    }
+
+    public static void main(String[] args) {
+        Game g = new Game("Test",15,"Gobang", true);
+        PropertyFileGameManagerImpl fileGameManager = getPropertyFileGameManagerImpl("src/main/resources/GameList.properties");
+
+        fileGameManager.deleteGame(g.getGameCode());
+        /*fileGameManager.storeGame(g);
+        System.out.println(fileGameManager.getGame(g.getGameCode()));*/
+
     }
 }
