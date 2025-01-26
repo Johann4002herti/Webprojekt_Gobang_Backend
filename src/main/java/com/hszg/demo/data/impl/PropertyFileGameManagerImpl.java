@@ -132,13 +132,20 @@ public class PropertyFileGameManagerImpl implements GameManager {
         storeAllGames(games);
     }
 
+    public void clearProps(){
+        List<Game> games = getAllGames();
+        games.clear();
+        storeAllGames(games);
+    }
+
     public static void main(String[] args) {
         Game g = new Game("Test",15,"Gobang", true);
         PropertyFileGameManagerImpl fileGameManager = getPropertyFileGameManagerImpl("src/main/resources/GameList.properties");
 
         fileGameManager.storeGame(g);
+        fileGameManager.storeGame(g);
         System.out.println(fileGameManager.getGame(g.getGameCode()));
-        fileGameManager.deleteGame(g.getGameCode());
+        fileGameManager.clearProps();
 
     }
 }
