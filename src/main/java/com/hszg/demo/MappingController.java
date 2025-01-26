@@ -54,9 +54,9 @@ public class MappingController {
 
         Game game;
 
-        game = propertyFileGameManager.getGame(gameCode);
+        //game = propertyFileGameManager.getGame(gameCode);
 
-        //game = new Game(gameCode, 16, "Gobang", true);
+        game = new Game(gameCode, 16, "Gobang", true);
 
         return game;
     }
