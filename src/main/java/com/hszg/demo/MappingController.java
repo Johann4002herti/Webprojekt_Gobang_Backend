@@ -82,6 +82,8 @@ public class MappingController {
         Tile tile = game.getBoard().getTileAt(x,y);
         game.makeMove(tile);
 
+        propertyFileGameManager.storeGame(game);
+
         MessageAnswer myAnswer = new MessageAnswer();
         myAnswer.setMessage("made a move at Tile: " + tile +"new GameStatus: " + game.getGameStatus());
         return
