@@ -59,8 +59,8 @@ public class MappingController {
 
         game = propertyFileGameManager.getGame(gameCode);
 
-        Logger myLogger2 = Logger.getLogger("SeeBoardGameLogger");
-        myLogger2.info("Game:" + game );
+        /*Logger myLogger2 = Logger.getLogger("SeeBoardGameLogger");
+        myLogger2.info("Game:" + game );*/
         //game = new Game(gameCode, 16, "Gobang", true);
 
         return game;
@@ -72,7 +72,7 @@ public class MappingController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseStatus(HttpStatus.OK)
-    public MessageAnswer makeMove(@RequestBody Tile tile, Game game) {
+    public MessageAnswer makeMove(@RequestParam("Tile") Tile tile, @RequestBody Game game) {
 
         Logger myLogger = Logger.getLogger("CreateTaskLogger");
         myLogger.info("Received a PUT request on game with gameCode " + game.getGameCode());
