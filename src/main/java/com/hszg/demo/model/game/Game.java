@@ -135,8 +135,8 @@ public class Game {
 
     public void makeMove(Tile tile){
         Tile t = board.getTileAt(tile.getxCoordinate(), tile.getyCoordinate());
-            if(playerOnesTurn)      t.setStatus("PlayerOne");
-            else                    t.setStatus("PlayerTwo");
+            if(playerOnesTurn)      t.setStatus("playerOne");
+            else                    t.setStatus("playerTwo");
             checkGameStatus(t);
             playerOnesTurn = !playerOnesTurn;
         }
