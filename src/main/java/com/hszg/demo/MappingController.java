@@ -82,6 +82,9 @@ public class MappingController {
         Tile tile = game.getBoard().getTileAt(x,y);
         game.makeMove(tile);
 
+        Logger myLogger2 = Logger.getLogger("MMGameLogger");
+        myLogger2.info("Game:" + game );
+
         propertyFileGameManager.storeGame(game);
 
         MessageAnswer myAnswer = new MessageAnswer();
