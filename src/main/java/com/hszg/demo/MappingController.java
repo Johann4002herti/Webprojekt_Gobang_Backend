@@ -1,19 +1,17 @@
 package com.hszg.demo;
 
-import com.hszg.demo.data.api.TaskManager;
-import com.hszg.demo.data.impl.PostgresTaskManagerImpl;
-import com.hszg.demo.data.impl.PropertyFileTaskManagerImpl;
+import com.hszg.demo.data.api.GameManager;
+import com.hszg.demo.data.impl.PropertyFileGameManagerImpl;
 import com.hszg.demo.model.alexa.AlexaRO;
 import com.hszg.demo.model.alexa.OutputSpeechRO;
 import com.hszg.demo.model.alexa.ResponseRO;
 import com.hszg.demo.model.game.MessageAnswer;
 import com.hszg.demo.model.game.Game;
-import com.hszg.demo.model.game.Board;
 import com.hszg.demo.model.game.Tile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import java.util.Collection;
+
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -23,8 +21,8 @@ import java.util.logging.Logger;
 public class MappingController {
 
 
-    TaskManager propertyFileTaskManager =
-            PropertyFileTaskManagerImpl.getPropertyFileTaskManagerImpl("src/main/resources/TaskList.properties");
+    GameManager propertyFileGameManager =
+            PropertyFileGameManagerImpl.getPropertyFileGameManagerImpl("src/main/resources/GameList.properties");
 
 
     @PostMapping(
@@ -38,6 +36,7 @@ public class MappingController {
         myLogger.info("Received a POST request on game with gameCode " + game.getGameCode());
 
         Game g = new Game(game.getGameCode(), game.getBoard().getSize(), game.getType(), game.getBenefitSharing());
+        propertyFileGameManager.storeGame(game);
 
         String gameCode = game.getGameCode();
         MessageAnswer myAnswer = new MessageAnswer();
@@ -55,9 +54,9 @@ public class MappingController {
 
         Game game;
 
-        //TODO get Game with Gamecode von properties
+        game = propertyFileGameManager.getGame(gameCode);
 
-        game = new Game(gameCode, 16, "Gobang", true);
+        //game = new Game(gameCode, 16, "Gobang", true);
 
         return game;
     }
@@ -133,10 +132,10 @@ public class MappingController {
     @ResponseStatus(HttpStatus.OK)
     public String createTask() {
 
-        final PostgresTaskManagerImpl postgresTaskManagerImpl =
+        /*final PostgresTaskManagerImpl postgresTaskManagerImpl =
                 PostgresTaskManagerImpl.getPostgresTaskManagerImpl();
         postgresTaskManagerImpl.createTableTask();
-
+*/
         return "Database Table created";
     }
 

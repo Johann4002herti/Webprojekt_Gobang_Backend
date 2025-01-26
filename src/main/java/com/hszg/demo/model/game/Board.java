@@ -1,9 +1,6 @@
 package com.hszg.demo.model.game;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -72,6 +69,10 @@ public class Board {
     @JsonProperty("Tiles")
     public void setTiles(List<Tile> tiles) {
         this.tiles = tiles;
+    }
+
+    public void addTile(Tile tile){
+        this.tiles.add(tile);
     }
 
     @JsonAnyGetter
@@ -177,10 +178,28 @@ public class Board {
         return tiles.get(0);
     }
 
+    public static Board parseBoard(String boardString){
+        Board board = new Board();
+
+        boardString = boardString.substring(boardString.indexOf("=")+1);
+        board.setSize(Integer.parseInt(boardString.substring(0,boardString.indexOf(","))));
+        boardString = boardString.substring(boardString.indexOf("=")+1);
+        boardString = boardString.substring(1);
+        String tileSubString = boardString.substring(0, boardString.lastIndexOf(",")-1);
+        tileSubString += ",";
+        board.setTiles(new ArrayList<Tile>());
+        while (!tileSubString.isEmpty()) {
+            board.addTile(Tile.parseTile(tileSubString.substring(0,tileSubString.indexOf(" ")+1)));
+            tileSubString = tileSubString.substring(tileSubString.indexOf(" ")+1);
+        }
+
+    return board;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(Board.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append('[');
         sb.append("size");
         sb.append('=');
         sb.append(((this.size == null)?"<null>":this.size));
@@ -201,4 +220,23 @@ public class Board {
         return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+        return Objects.equals(size, board.size) && Objects.equals(tiles, board.tiles);
+    }
+
+    public static void main(String[] args) {
+        Board board1 = new Board(15);
+        Board board2 = new Board(15);
+        Board board3 = new Board(15);
+        System.out.println(board1);
+        System.out.println(board2);
+        System.out.println(board3);
+        board2 = Board.parseBoard(board1.toString());
+        System.out.println(board1.toString());
+        System.out.println(board2.toString());
+    }
 }

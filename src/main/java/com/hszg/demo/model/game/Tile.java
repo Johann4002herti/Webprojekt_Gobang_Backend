@@ -82,10 +82,24 @@ public class Tile {
         this.additionalProperties.put(name, value);
     }
 
+    public static Tile parseTile(String tileString){
+        Tile tile = new Tile();
+
+        if (!tileString.isEmpty()){
+            tileString = tileString.substring(tileString.indexOf("=")+1);
+            tile.setStatus(tileString.substring(0,tileString.indexOf(",")));
+            tileString = tileString.substring(tileString.indexOf("=")+1);
+            tile.setxCoordinate(Integer.parseInt(tileString.substring(0,tileString.indexOf(","))));
+            tileString = tileString.substring(tileString.indexOf("=")+1);
+            tile.setyCoordinate(Integer.parseInt(tileString.substring(0,tileString.indexOf(","))));
+        }
+        return tile;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(Tile.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append('[');
         sb.append("status");
         sb.append('=');
         sb.append(((this.status == null)?"<null>":this.status));
