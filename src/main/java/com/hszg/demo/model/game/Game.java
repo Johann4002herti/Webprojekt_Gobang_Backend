@@ -133,18 +133,18 @@ public class Game {
         this.additionalProperties.put(name, value);
     }
 
-    public void makeMove(Tile tile){
-        Tile t = board.getTileAt(tile.getxCoordinate(), tile.getyCoordinate());
-            if(playerOnesTurn)      t.setStatus("playerOne");
-            else                    t.setStatus("playerTwo");
-            checkGameStatus(t);
+    public void makeMove(int x, int y){
+            if(playerOnesTurn)      this.getBoard().setStatusOfTileAt(x,y,"playerOne");
+            else                    this.getBoard().setStatusOfTileAt(x,y,"playerTwo");
+
+            checkGameStatus(x,y);
             playerOnesTurn = !playerOnesTurn;
         }
 
-    private void checkGameStatus(Tile tile){
+    private void checkGameStatus(int x,int y){
 
-        if(board.checkWhoWon(tile) != null){
-            gameStatus = board.checkWhoWon(tile);
+        if(board.checkWhoWon(x,y) != null){
+            gameStatus = board.checkWhoWon(x,y);
         }
         else if(board.checkIsFull()){
             gameStatus = "isFull";

@@ -75,6 +75,10 @@ public class Board {
         this.tiles.add(tile);
     }
 
+    public void setStatusOfTileAt(int x, int y, String status){
+        getTileAt(x,y).setStatus(status);
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -85,9 +89,7 @@ public class Board {
         this.additionalProperties.put(name, value);
     }
     
-    public String checkWhoWon(Tile tile){
-        int x = tile.getxCoordinate();
-        int y = tile.getyCoordinate();
+    public String checkWhoWon(int x, int y){
         int whoHasWon = 0;
         int player = 0;
         Tile t = getTileAt(x,y);

@@ -80,8 +80,7 @@ public class MappingController {
                 "and coordinates: x: "+x+", y: "+y);
 
         Game localGame = propertyFileGameManager.getGame(gameCode);
-        Tile tile = localGame.getBoard().getTileAt(x,y);
-        localGame.makeMove(tile);
+        localGame.makeMove(x,y);
 
         Logger myLogger2 = Logger.getLogger("MMGameLogger");
         myLogger2.info("Game:" + localGame );
@@ -89,7 +88,7 @@ public class MappingController {
         propertyFileGameManager.storeGame(localGame);
 
         MessageAnswer myAnswer = new MessageAnswer();
-        myAnswer.setMessage("made a move at Tile: " + tile +"new GameStatus: " + localGame.getGameStatus());
+        myAnswer.setMessage("made a move at Tile: coordinates: x: "+x+", y: "+y+" new GameStatus: " + localGame.getGameStatus());
         return
                 myAnswer;
     }
