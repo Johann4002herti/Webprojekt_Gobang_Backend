@@ -115,6 +115,9 @@ public class PropertyFileGameManagerImpl implements GameManager {
     @Override
     public void storeGame(Game game) {
         List<Game> games = getAllGames();
+        if(games.contains(game)){
+            deleteGame(game.getGameCode());
+        }
         games.add(game);
         storeAllGames(games);
     }
