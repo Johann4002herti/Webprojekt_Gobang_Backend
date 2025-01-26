@@ -79,13 +79,14 @@ public class MappingController {
         myLogger.info("Received a PUT request on game with gameCode " + game.getGameCode() +
                 "and coordinates: x: "+x+", y: "+y);
 
-        Tile tile = game.getBoard().getTileAt(x,y);
-        game.makeMove(tile);
+        Game localGame = game;
+        Tile tile = localGame.getBoard().getTileAt(x,y);
+        localGame.makeMove(tile);
 
         Logger myLogger2 = Logger.getLogger("MMGameLogger");
-        myLogger2.info("Game:" + game );
+        myLogger2.info("Game:" + localGame );
 
-        propertyFileGameManager.storeGame(game);
+        propertyFileGameManager.storeGame(localGame);
 
         MessageAnswer myAnswer = new MessageAnswer();
         myAnswer.setMessage("made a move at Tile: " + tile +"new GameStatus: " + game.getGameStatus());
