@@ -56,7 +56,8 @@ public class MappingController {
 
         game = propertyFileGameManager.getGame(gameCode);
 
-        myLogger.info("Game:" + game );
+        Logger myLogger2 = Logger.getLogger("SeeBoardGameLogger");
+        myLogger2.info("Game:" + game );
         //game = new Game(gameCode, 16, "Gobang", true);
 
         return game;
