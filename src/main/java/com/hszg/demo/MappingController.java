@@ -54,9 +54,10 @@ public class MappingController {
 
         Game game;
 
-        //game = propertyFileGameManager.getGame(gameCode);
+        game = propertyFileGameManager.getGame(gameCode);
 
-        game = new Game(gameCode, 16, "Gobang", true);
+        myLogger.info("Game:" + game );
+        //game = new Game(gameCode, 16, "Gobang", true);
 
         return game;
     }
