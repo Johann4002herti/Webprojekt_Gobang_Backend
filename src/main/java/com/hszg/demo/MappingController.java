@@ -35,8 +35,8 @@ public class MappingController {
         Logger myLogger = Logger.getLogger("CreateTaskLogger");
         myLogger.info("Received a POST request on game with gameCode " + game.getGameCode());
 
-        //Game g = new Game(game.getGameCode(), game.getBoard().getSize(), game.getType(), game.getBenefitSharing());
-        propertyFileGameManager.storeGame(game);
+        Game g = new Game(game.getGameCode(), game.getBoard().getSize(), game.getType(), game.getBenefitSharing());
+        propertyFileGameManager.storeGame(g);
 
         String gameCode = game.getGameCode();
         MessageAnswer myAnswer = new MessageAnswer();
