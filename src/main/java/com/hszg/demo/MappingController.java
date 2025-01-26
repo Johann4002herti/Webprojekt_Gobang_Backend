@@ -49,8 +49,8 @@ public class MappingController {
     @ResponseStatus(HttpStatus.OK)
     public Game seeBoard(@RequestParam("GameCode") String gameCode){
 
-        Logger myLogger = Logger.getLogger("SeeBoardLogger");
-        myLogger.info("Received a GET request on game with token " + gameCode);
+        /*Logger myLogger = Logger.getLogger("SeeBoardLogger");
+        myLogger.info("Received a GET request on game with token " + gameCode);*/
 
         Game game;
 
