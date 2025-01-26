@@ -73,13 +73,13 @@ public class MappingController {
     )
     @ResponseStatus(HttpStatus.OK)
     public MessageAnswer makeMove(@RequestParam("TileX") int x, @RequestParam("TileY") int y ,
-                                  @RequestBody Game game) {
+                                  @RequestParam String gameCode) {
 
         Logger myLogger = Logger.getLogger("MakeMoveLogger");
-        myLogger.info("Received a PUT request on game with gameCode " + game.getGameCode() +
+        myLogger.info("Received a PUT request on game with gameCode " + gameCode +
                 "and coordinates: x: "+x+", y: "+y);
 
-        Game localGame = game;
+        Game localGame = propertyFileGameManager.getGame(gameCode);
         Tile tile = localGame.getBoard().getTileAt(x,y);
         localGame.makeMove(tile);
 
@@ -89,7 +89,7 @@ public class MappingController {
         propertyFileGameManager.storeGame(localGame);
 
         MessageAnswer myAnswer = new MessageAnswer();
-        myAnswer.setMessage("made a move at Tile: " + tile +"new GameStatus: " + game.getGameStatus());
+        myAnswer.setMessage("made a move at Tile: " + tile +"new GameStatus: " + localGame.getGameStatus());
         return
                 myAnswer;
     }
