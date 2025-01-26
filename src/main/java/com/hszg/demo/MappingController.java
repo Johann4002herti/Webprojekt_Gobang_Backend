@@ -73,7 +73,7 @@ public class MappingController {
     )
     @ResponseStatus(HttpStatus.OK)
     public MessageAnswer makeMove(@RequestParam("TileX") int x, @RequestParam("TileY") int y ,
-                                  @RequestParam String gameCode) {
+                                  @RequestParam("gameCode") String gameCode) {
 
         Logger myLogger = Logger.getLogger("MakeMoveLogger");
         myLogger.info("Received a PUT request on game with gameCode " + gameCode +
