@@ -72,15 +72,15 @@ public class MappingController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseStatus(HttpStatus.OK)
-    public MessageAnswer makeMove(@RequestParam("Tile") Tile tile, @RequestBody Game game) {
+    public MessageAnswer makeMove(/*@RequestParam("Tile") Tile tile,*/ @RequestBody Game game) {
 
         Logger myLogger = Logger.getLogger("CreateTaskLogger");
         myLogger.info("Received a PUT request on game with gameCode " + game.getGameCode());
 
-        game.makeMove(tile);
+        //game.makeMove(tile);
 
         MessageAnswer myAnswer = new MessageAnswer();
-        myAnswer.setMessage("made a move at Tile: " + tile +"new GameStatus: " + game.getGameStatus());
+        //myAnswer.setMessage("made a move at Tile: " + tile +"new GameStatus: " + game.getGameStatus());
         return
                 myAnswer;
     }
