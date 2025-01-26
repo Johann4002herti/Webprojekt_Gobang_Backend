@@ -85,7 +85,7 @@ public class MappingController {
         Logger myLogger2 = Logger.getLogger("MMGameLogger");
         myLogger2.info("Game:" + localGame );
 
-        propertyFileGameManager.storeGame(localGame);
+        propertyFileGameManager.updateGame(gameCode, localGame);
 
         MessageAnswer myAnswer = new MessageAnswer();
         myAnswer.setMessage("made a move at Tile: coordinates: x: "+x+", y: "+y+" new GameStatus: " + localGame.getGameStatus());

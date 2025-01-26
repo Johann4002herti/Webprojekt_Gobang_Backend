@@ -122,6 +122,16 @@ public class PropertyFileGameManagerImpl implements GameManager {
         storeAllGames(games);
     }
 
+    public void updateGame(String gameCode, Game game){
+        List<Game> games = getAllGames();
+        Game gameToUpdate = getGame(gameCode);
+
+        games.remove(gameToUpdate);
+        games.add(game);
+
+        storeAllGames(games);
+    }
+
     @Override
     public void deleteGame(String gameCode) {
         List<Game> games = getAllGames();
