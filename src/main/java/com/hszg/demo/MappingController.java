@@ -38,8 +38,8 @@ public class MappingController {
         Game g = new Game(game.getGameCode(), game.getBoard().getSize(), game.getType(), game.getBenefitSharing());
         propertyFileGameManager.storeGame(g);
 
-        Logger myLogger2 = Logger.getLogger("HostGameLogger");
-        myLogger2.info("Game:" + g );
+        /*Logger myLogger2 = Logger.getLogger("HostGameLogger");
+        myLogger2.info("Game:" + g );*/
 
         String gameCode = g.getGameCode();
         MessageAnswer myAnswer = new MessageAnswer();
@@ -52,8 +52,8 @@ public class MappingController {
     @ResponseStatus(HttpStatus.OK)
     public Game seeBoard(@RequestParam("GameCode") String gameCode){
 
-        /*Logger myLogger = Logger.getLogger("SeeBoardLogger");
-        myLogger.info("Received a GET request on game with token " + gameCode);*/
+        Logger myLogger = Logger.getLogger("SeeBoardLogger");
+        myLogger.info("Received a GET request on game with token " + gameCode);
 
         Game game;
 
@@ -75,7 +75,7 @@ public class MappingController {
     public MessageAnswer makeMove(@RequestParam("TileX") int x, @RequestParam("TileY") int y ,
                                   @RequestBody Game game) {
 
-        Logger myLogger = Logger.getLogger("CreateTaskLogger");
+        Logger myLogger = Logger.getLogger("MakeMoveLogger");
         myLogger.info("Received a PUT request on game with gameCode " + game.getGameCode());
 
         Tile tile = game.getBoard().getTileAt(x,y);
