@@ -134,17 +134,23 @@ public class Game {
     }
 
     public void makeMove(int x, int y){
-            if(playerOnesTurn)      this.getBoard().setStatusOfTileAt(x,y,"playerOne");
-            else                    this.getBoard().setStatusOfTileAt(x,y,"playerTwo");
+        if(gameStatus == "isRunning"){
+            if (this.getBoard().getTileAt(x,y).getStatus().equals("empty")) {
+                if(playerOnesTurn )     this.getBoard().setStatusOfTileAt(x,y,"playerOne");
+                else                    this.getBoard().setStatusOfTileAt(x,y,"playerTwo");
+            }
 
-            checkGameStatus(x,y);
-            playerOnesTurn = !playerOnesTurn;
+        checkGameStatus(x,y);
+        playerOnesTurn = !playerOnesTurn;
         }
+    }
 
     private void checkGameStatus(int x,int y){
 
-        if(board.checkWhoWon(x,y) != null){
-            gameStatus = board.checkWhoWon(x,y);
+        String whoHasWon = board.checkWhoWon(x,y);
+
+        if(whoHasWon != null){
+            gameStatus = whoHasWon;
         }
         else if(board.checkIsFull()){
             gameStatus = "isFull";
@@ -199,8 +205,21 @@ public class Game {
         Game game = new Game("Test",15,"Gobang",true);
 
         game.makeMove(0,0);
-        game.makeMove(1,0);
+        game.makeMove(1,1);
+        game.makeMove(0,1);
+        game.makeMove(1,2);
+        game.makeMove(0,2);
+        game.makeMove(1,3);
+        game.makeMove(0,3);
+        game.makeMove(1,4);
+        game.makeMove(0,4);
+        game.makeMove(1,5);
+        game.makeMove(0,5);
+        game.makeMove(1,6);
 
+        System.out.println(game.getBoard().displayBoard());
+
+        System.out.println(game.gameStatus);
         System.out.println(game.getBoard().getTileAt(0,0));
         System.out.println(game.getBoard().getTileAt(1,0));
         System.out.println(game.getBoard().getTileAt(1,1));

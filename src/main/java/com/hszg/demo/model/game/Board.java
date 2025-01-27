@@ -104,19 +104,19 @@ public class Board {
                 }
 
         if (player !=0){
-            //Diagonal
+            //Diagonal: \
             if (count(player, x, y, 1, 1) + count(player, x, y, -1, -1) + 1 >= 5){
                 whoHasWon=player;
             }
-            //Diagonal
+            //Diagonal: /
             else if (count(player, x, y, -1, 1) + count(player, x, y, 1, -1) + 1 >= 5){
                 whoHasWon=player;
             }
-            //Horizontal
+            //Horizontal: -
             else if (count(player, x, y, 0, 1) + count(player, x, y, 0, -1) + 1 >= 5){
                 whoHasWon=player;
             }
-            //Vertical
+            //Vertical: |
             else if (count(player, x, y, 1, 0) + count(player, x, y, -1, 0) + 1 >= 5){
                 whoHasWon=player;
             }
@@ -154,7 +154,7 @@ public class Board {
         yToCheck += yDirection;
         if (xToCheck < 0 || yToCheck < 0 || xToCheck >= numberOfRows || yToCheck >= numberOfColumns)
             break;
-        if (getTileAt(xToCheck,yToCheck).getStatus().equals(player))
+        if (getTileAt(xToCheck,yToCheck).getStatus().equals(playerString))
             count++;
         else
             break;
@@ -196,6 +196,24 @@ public class Board {
         }
 
     return board;
+    }
+
+    public String displayBoard(){
+        String result ="";
+        for (int i = 0; i < size; i++) {
+           for (int j = 0; j < size; j++) {
+               Tile t = getTileAt(i,j);
+               if (t.getStatus().equals("playerOne")) {
+                   result += "1 ";
+               } else if (t.getStatus().equals("playerTwo")) {
+                   result += "2 ";
+               } else if (t.getStatus().equals("empty")) {
+                   result += "_ ";
+               }
+           }
+           result += "\n";
+        }
+        return result;
     }
 
     @Override
