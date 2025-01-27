@@ -93,7 +93,28 @@ public class MappingController {
                 myAnswer;
     }
 
+    @PostMapping(
+            path = "/clearProps",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public MessageAnswer claerProperties(@RequestParam("Password") String password) {
 
+        Logger myLogger = Logger.getLogger("CreateTaskLogger");
+        myLogger.info("Received a POST request on clearProps");
+
+        MessageAnswer myAnswer = new MessageAnswer();
+
+        if(password.equals("09032005")){
+            propertyFileGameManager.clearProps();
+            myAnswer.setMessage("cleared Props" );
+        }else {
+            myAnswer.setMessage("wrong password" );
+        }
+
+        return
+                myAnswer;
+    }
 
     @PostMapping(
             path = "/alexa",

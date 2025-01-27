@@ -12,4 +12,5 @@ public interface GameManager {
     void updateGame(String gameCode, Game game);
     void storeAllGames(List<Game> games);
     void deleteGame(String gameCode);
+    void clearProps();
 }

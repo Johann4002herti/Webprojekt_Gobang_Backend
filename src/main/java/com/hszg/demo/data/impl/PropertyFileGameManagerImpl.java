@@ -152,6 +152,7 @@ public class PropertyFileGameManagerImpl implements GameManager {
         storeAllGames(games);
     }
 
+    @Override
     public void clearProps(){
         List<Game> games = getAllGames();
         games.clear();
