@@ -134,10 +134,10 @@ public class Game {
     }
 
     public void makeMove(int x, int y){
-        if(gameStatus == "isRunning"){
+        if(gameStatus.equals("isRunning")){
             if (this.getBoard().getTileAt(x,y).getStatus().equals("empty")) {
-                if(playerOnesTurn )     this.getBoard().setStatusOfTileAt(x,y,"playerOne");
-                else                    this.getBoard().setStatusOfTileAt(x,y,"playerTwo");
+                if(playerOnesTurn)     this.getBoard().setStatusOfTileAt(x,y,"playerOne");
+                else                   this.getBoard().setStatusOfTileAt(x,y,"playerTwo");
             }
 
         checkGameStatus(x,y);
