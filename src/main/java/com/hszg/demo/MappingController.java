@@ -93,7 +93,7 @@ public class MappingController {
                 myAnswer;
     }
 
-    @PostMapping(
+    @PutMapping(
             path = "/clearProps",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
@@ -101,7 +101,7 @@ public class MappingController {
     public MessageAnswer claerProperties(@RequestParam("Password") String password) {
 
         Logger myLogger = Logger.getLogger("CreateTaskLogger");
-        myLogger.info("Received a POST request on clearProps");
+        myLogger.info("Received a PUT request on clearProps");
 
         MessageAnswer myAnswer = new MessageAnswer();
 
