@@ -83,7 +83,7 @@ public class MappingController {
         localGame.makeMove(x,y);
 
         Logger myLogger2 = Logger.getLogger("MMGameLogger");
-        myLogger2.info("Game:" + localGame );
+        myLogger2.info("Game:" + localGame);
 
         propertyFileGameManager.updateGame(gameCode, localGame);
 

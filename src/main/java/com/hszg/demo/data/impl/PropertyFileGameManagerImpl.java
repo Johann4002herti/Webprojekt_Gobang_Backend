@@ -95,7 +95,6 @@ public class PropertyFileGameManagerImpl implements GameManager {
                             Integer.parseInt(properties.getProperty("Tile." + i + "."+ j +".x")),
                             Integer.parseInt(properties.getProperty("Tile." + i + "."+ j +".y"))
                     ));
-
                     j++;
                 }
                 String type = properties.getProperty("Game." + i + ".Type");
@@ -123,10 +122,18 @@ public class PropertyFileGameManagerImpl implements GameManager {
     }
 
     public void updateGame(String gameCode, Game game){
-        List<Game> games = getAllGames();
-        Game gameToUpdate = getGame(gameCode);
+        List<Game> games = new ArrayList<>();
+        Iterator<Game> iterator = getAllGames().iterator();
 
-        games.remove(gameToUpdate);
+        while(iterator.hasNext()) {
+            Game g = iterator.next();
+            if (g.getGameCode().equals(gameCode)) {
+                iterator.remove();
+            } else {
+                games.add(g);
+            }
+        }
+
         games.add(game);
 
         storeAllGames(games);
@@ -155,8 +162,14 @@ public class PropertyFileGameManagerImpl implements GameManager {
         Game g = new Game("Test",15,"Gobang", true);
         PropertyFileGameManagerImpl fileGameManager = getPropertyFileGameManagerImpl("src/main/resources/GameList.properties");
 
+        //fileGameManager.storeGame(g);
         fileGameManager.storeGame(g);
-        fileGameManager.storeGame(g);
+        Game game = fileGameManager.getGame(g.getGameCode());
+        System.out.println(fileGameManager.getGame(g.getGameCode()));
+        game.makeMove(0,0);
+        game.makeMove(0,1);
+        System.out.println(game);
+        fileGameManager.updateGame(game.getGameCode(),game);
         System.out.println(fileGameManager.getGame(g.getGameCode()));
         fileGameManager.clearProps();
 
