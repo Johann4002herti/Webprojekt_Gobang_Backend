@@ -61,7 +61,6 @@ public class MappingController {
 
         /*Logger myLogger2 = Logger.getLogger("SeeBoardGameLogger");
         myLogger2.info("Game:" + game );*/
-        //game = new Game(gameCode, 16, "Gobang", true);
 
         return game;
     }
@@ -100,7 +99,7 @@ public class MappingController {
     @ResponseStatus(HttpStatus.OK)
     public MessageAnswer claerProperties(@RequestParam("Password") String password) {
 
-        Logger myLogger = Logger.getLogger("CreateTaskLogger");
+        Logger myLogger = Logger.getLogger("clearPropsLogger");
         myLogger.info("Received a PUT request on clearProps");
 
         MessageAnswer myAnswer = new MessageAnswer();

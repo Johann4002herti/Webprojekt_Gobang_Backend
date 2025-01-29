@@ -123,10 +123,10 @@ public class Board {
         }
 
         if (whoHasWon == 1){
-            return "PlayerOneWon";
+            return "playerOneWon";
         }
         else if (whoHasWon == 2){
-            return "PlayerTwoWon";
+            return "playerTwoWon";
         }
         else {
             return null;
