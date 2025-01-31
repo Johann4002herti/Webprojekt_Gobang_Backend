@@ -1,5 +1,6 @@
 package com.hszg.demo;
 
+import com.amazonaws.util.IOUtils;
 import com.hszg.demo.data.api.GameManager;
 import com.hszg.demo.data.impl.PropertyFileGameManagerImpl;
 import com.hszg.demo.model.PostsThread;
@@ -17,12 +18,14 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -179,7 +182,7 @@ public class MappingController {
 
                 if (entity != null) {
                     try (InputStream instream = entity.getContent()) {
-                        String output = String.valueOf(instream.read());
+                        String output = IOUtils.toString(instream);
                         myLogger.info("Received a POST request on " + httppost.getURI() + "with output: "+ output);
                         myAnswer.setMessage(output);
                     } catch (Exception e){
