@@ -23,8 +23,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -159,46 +162,58 @@ public class MappingController {
         PostsThread stopToMuchPosts = new PostsThread();
 
         if (stopToMuchPosts.getAllowedToPost()){
-            HttpClient httpclient = HttpClients.createDefault();
-            HttpPost httppost = new HttpPost("https://www.bibleserver.com/api/parser");
-
-            // Request parameters and other properties.
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
             // Key for Backend: 3849460c9d362f1505737149a6b588ec8f4a1bfa
             // Key for Frontendend: c19840c2b0dcd2f043a0a7d90e85a4f0e1ca95b9
-            params.add(new BasicNameValuePair("key", "3849460c9d362f1505737149a6b588ec8f4a1bfa"));
-            params.add(new BasicNameValuePair("text", text));
-            params.add(new BasicNameValuePair("lang", "en"));
-            params.add(new BasicNameValuePair("trl", "NIV"));
-            try {
-                httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
 
-            //Execute and get the response.
-            try {
-                myLogger.info("Sending POST request to " + httppost.getURI());
-                HttpResponse response = httpclient.execute(httppost);
-                HttpEntity entity = response.getEntity();
+            String apiKey = "3849460c9d362f1505737149a6b588ec8f4a1bfa";
+            String url = "https://www.bibleserver.com/api/parser";
 
-                if (entity != null) {
-                    try (InputStream instream = entity.getContent()) {
-                        String output = IOUtils.toString(instream);
-                        myLogger.info("Received a POST answer on '" + httppost.getURI() + "' with output: '"+ output+"'");
-                        myAnswer.setMessage(output);
-                    } catch (Exception e){
-                        throw new RuntimeException(e);
-                    }
+            // Parameter zusammenstellen
+            String data = "key=" + URLEncoder.encode(apiKey, StandardCharsets.UTF_8) +
+                    "&text=" + URLEncoder.encode(text, StandardCharsets.UTF_8) +
+                    "&lang=de&trl=LUT";
+
+            // URL und Verbindung einrichten
+            try {
+                URL obj = new URL(url);
+                HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+                con.setRequestMethod("POST");
+                con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                con.setRequestProperty("Referer", "http://" + InetAddress.getLocalHost().getHostName());
+                con.setDoOutput(true);
+
+                // POST-Daten senden
+                try (OutputStream os = con.getOutputStream()) {
+                    byte[] input = data.getBytes(StandardCharsets.UTF_8);
+                    os.write(input, 0, input.length);
                 }
-            } catch (Exception e) {
+
+                // Antwort lesen
+                int responseCode = con.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                        String inputLine;
+                        StringBuilder response = new StringBuilder();
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
+                        // Antwort verarbeiten
+                        String result = response.toString();
+                        myAnswer.setMessage(result);
+                    }
+                } else {
+                    System.out.println("Fehler beim Abrufen der API: HTTP-Code " + responseCode);
+                }
+                con.disconnect();
+            }catch (Exception e){
                 throw new RuntimeException(e);
             }
-
             stopToMuchPosts.start();
         } else {
             myAnswer.setMessage("not allowed to post: please wait");
         }
+
+
 
         return
                 myAnswer;
