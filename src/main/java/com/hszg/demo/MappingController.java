@@ -164,7 +164,7 @@ public class MappingController {
 
             // Request parameters and other properties.
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("key", "3849460c9d362f1505737149a6b588ec8f4a1bfa"));
+            params.add(new BasicNameValuePair("key", "c19840c2b0dcd2f043a0a7d90e85a4f0e1ca95b9"/*"3849460c9d362f1505737149a6b588ec8f4a1bfa"*/));
             params.add(new BasicNameValuePair("text", text));
             params.add(new BasicNameValuePair("lang", "en"));
             params.add(new BasicNameValuePair("trl", "NIV"));
@@ -183,7 +183,7 @@ public class MappingController {
                 if (entity != null) {
                     try (InputStream instream = entity.getContent()) {
                         String output = IOUtils.toString(instream);
-                        myLogger.info("Received a POST request on " + httppost.getURI() + "with output: "+ output);
+                        myLogger.info("Received a POST answer on '" + httppost.getURI() + "' with output: '"+ output+"'");
                         myAnswer.setMessage(output);
                     } catch (Exception e){
                         throw new RuntimeException(e);
