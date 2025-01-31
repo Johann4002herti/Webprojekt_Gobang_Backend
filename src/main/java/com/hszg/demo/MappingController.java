@@ -2,16 +2,28 @@ package com.hszg.demo;
 
 import com.hszg.demo.data.api.GameManager;
 import com.hszg.demo.data.impl.PropertyFileGameManagerImpl;
+import com.hszg.demo.model.PostsThread;
 import com.hszg.demo.model.alexa.AlexaRO;
 import com.hszg.demo.model.alexa.OutputSpeechRO;
 import com.hszg.demo.model.alexa.ResponseRO;
 import com.hszg.demo.model.game.MessageAnswer;
 import com.hszg.demo.model.game.Game;
 import com.hszg.demo.model.game.Tile;
+import org.apache.http.*;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -35,15 +47,29 @@ public class MappingController {
         Logger myLogger = Logger.getLogger("CreateTaskLogger");
         myLogger.info("Received a POST request on game with gameCode " + game.getGameCode());
 
-        Game g = new Game(game.getGameCode(), game.getBoard().getSize(), game.getType(), game.getBenefitSharing());
-        propertyFileGameManager.storeGame(g);
+        List<Game> games = propertyFileGameManager.getAllGames();
+        boolean gameAlreadyExists = false;
+
+        for (Game testGame : games) {
+            if (testGame.getGameCode() == game.getGameCode()) {
+                gameAlreadyExists = true;
+            }
+        }
+
+        MessageAnswer myAnswer = new MessageAnswer();
+
+        if (!gameAlreadyExists) {
+            Game g = new Game(game.getGameCode(), game.getBoard().getSize(), game.getType(), game.getBenefitSharing());
+            propertyFileGameManager.storeGame(g);
+            myAnswer.setMessage("Started Game with Gamecode: " + g.getGameCode() );
+        } else{
+            myAnswer.setMessage("Game already exists: no Game started");
+        }
 
         /*Logger myLogger2 = Logger.getLogger("HostGameLogger");
         myLogger2.info("Game:" + g );*/
 
-        String gameCode = g.getGameCode();
-        MessageAnswer myAnswer = new MessageAnswer();
-        myAnswer.setMessage("Started Game with Gamecode: " + gameCode );
+
         return
                 myAnswer;
     }
@@ -115,90 +141,61 @@ public class MappingController {
                 myAnswer;
     }
 
+
     @PostMapping(
-            path = "/alexa",
+            path = "/verses",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseStatus(HttpStatus.OK)
-    public AlexaRO createTask(@RequestBody AlexaRO alexaRO) {
+    public MessageAnswer autoLinkVerse(@RequestParam("text") String text) {
 
-        String myAnswer = "";
-        if (alexaRO.getRequest().getIntent().getName().equals("TaskReadIntent")) {
-            myAnswer += "You have to do the following tasks: ";
-            myAnswer += "1. Learn for the math exam.";
-            myAnswer += "2. Buy milk for mom.";
-            myAnswer += "3. Continue my work for web engineering.";
-        }
-        else {
-            myAnswer += "I do not know what to say.";
+        Logger myLogger = Logger.getLogger("searchVerseLogger");
+        myLogger.info("Received a POST request on verses with text " + text);
+
+        MessageAnswer myAnswer = new MessageAnswer();
+        PostsThread stopToMuchPosts = new PostsThread();
+
+        if (stopToMuchPosts.getAllowedToPost()){
+            HttpClient httpclient = HttpClients.createDefault();
+            HttpPost httppost = new HttpPost("https://www.bibleserver.com/api/parser");
+
+            // Request parameters and other properties.
+            List<NameValuePair> params = new ArrayList<NameValuePair>(2);
+            params.add(new BasicNameValuePair("key", "3849460c9d362f1505737149a6b588ec8f4a1bfa"));
+            params.add(new BasicNameValuePair("text", text));
+            params.add(new BasicNameValuePair("lang", "en"));
+            params.add(new BasicNameValuePair("trl", "NIV"));
+            try {
+                httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+
+            //Execute and get the response.
+            try {
+                HttpResponse response = httpclient.execute(httppost);
+                HttpEntity entity = response.getEntity();
+
+                if (entity != null) {
+                    try (InputStream instream = entity.getContent()) {
+                        String output = String.valueOf(instream.read());
+                        myAnswer.setMessage(output);
+                    } catch (Exception e){
+                        throw new RuntimeException(e);
+                    }
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            stopToMuchPosts.start();
+            myAnswer.setMessage("POST done");
+        } else {
+            myAnswer.setMessage("not allowed to post: please wait");
         }
 
         return
-                prepareResponse(alexaRO, myAnswer, true);
-    }
-
-
-
-
-    @GetMapping("/hszg-tasks")
-    public List<Game> getTasks(@RequestParam(value = "email", defaultValue = "email") String email,
-                             @RequestParam(value = "token", defaultValue = "123") String token) {
-
-        Logger myLogger = Logger.getLogger("GetTaskLogger");
-        myLogger.info("Received a GET request on hszg-tasks with token " + token);
-
-        // TODO
-        //  check token
-        //  TokenManager
-
-        //final List<Task> allTasks = propertyFileTaskManager.getAllTasks(email);
-
-        return null;
-    }
-
-
-
-
-    @PostMapping(
-            path = "/task/createtable"
-    )
-    @ResponseStatus(HttpStatus.OK)
-    public String createTask() {
-
-        /*final PostgresTaskManagerImpl postgresTaskManagerImpl =
-                PostgresTaskManagerImpl.getPostgresTaskManagerImpl();
-        postgresTaskManagerImpl.createTableTask();
-*/
-        return "Database Table created";
-    }
-
-
-
-    @PostMapping(
-            path = "/alexa",
-            consumes = {MediaType.APPLICATION_JSON_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE}
-    )
-    public AlexaRO getTasks(@RequestBody AlexaRO alexaRO) {
-
-        // TODO
-        String outText = "";
-
-
-        return alexaRO;
-    }
-
-    private AlexaRO prepareResponse(AlexaRO alexaRO, String outText, boolean shouldEndSession) {
-
-        alexaRO.setRequest(null);
-        alexaRO.setSession(null);
-        alexaRO.setContext(null);
-        OutputSpeechRO outputSpeechRO = new OutputSpeechRO();
-        outputSpeechRO.setType("PlainText");
-        outputSpeechRO.setText(outText);
-        ResponseRO response = new ResponseRO(outputSpeechRO, shouldEndSession);
-        alexaRO.setResponse(response);
-        return alexaRO;
+                myAnswer;
     }
 
 }
