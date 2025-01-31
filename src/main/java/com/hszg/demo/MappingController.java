@@ -160,7 +160,7 @@ public class MappingController {
             HttpPost httppost = new HttpPost("https://www.bibleserver.com/api/parser");
 
             // Request parameters and other properties.
-            List<NameValuePair> params = new ArrayList<NameValuePair>(2);
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("key", "3849460c9d362f1505737149a6b588ec8f4a1bfa"));
             params.add(new BasicNameValuePair("text", text));
             params.add(new BasicNameValuePair("lang", "en"));
@@ -173,12 +173,14 @@ public class MappingController {
 
             //Execute and get the response.
             try {
+                myLogger.info("Sending POST request to " + httppost.getURI());
                 HttpResponse response = httpclient.execute(httppost);
                 HttpEntity entity = response.getEntity();
 
                 if (entity != null) {
                     try (InputStream instream = entity.getContent()) {
                         String output = String.valueOf(instream.read());
+                        myLogger.info("Received a POST request on " + httppost.getURI() + "with output: "+ output);
                         myAnswer.setMessage(output);
                     } catch (Exception e){
                         throw new RuntimeException(e);
@@ -189,7 +191,6 @@ public class MappingController {
             }
 
             stopToMuchPosts.start();
-            myAnswer.setMessage("POST done");
         } else {
             myAnswer.setMessage("not allowed to post: please wait");
         }
