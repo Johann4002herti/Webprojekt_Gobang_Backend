@@ -164,7 +164,9 @@ public class MappingController {
 
             // Request parameters and other properties.
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("key", "c19840c2b0dcd2f043a0a7d90e85a4f0e1ca95b9"/*"3849460c9d362f1505737149a6b588ec8f4a1bfa"*/));
+            // Key for Backend: 3849460c9d362f1505737149a6b588ec8f4a1bfa
+            // Key for Frontendend: c19840c2b0dcd2f043a0a7d90e85a4f0e1ca95b9
+            params.add(new BasicNameValuePair("key", "3849460c9d362f1505737149a6b588ec8f4a1bfa"));
             params.add(new BasicNameValuePair("text", text));
             params.add(new BasicNameValuePair("lang", "en"));
             params.add(new BasicNameValuePair("trl", "NIV"));
