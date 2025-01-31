@@ -171,7 +171,7 @@ public class MappingController {
             // Parameter zusammenstellen
             String data = "key=" + URLEncoder.encode(apiKey, StandardCharsets.UTF_8) +
                     "&text=" + URLEncoder.encode(text, StandardCharsets.UTF_8) +
-                    "&lang=de&trl=LUT";
+                    "&lang=en&trl=NIV";
 
             // URL und Verbindung einrichten
             try {
