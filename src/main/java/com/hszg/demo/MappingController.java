@@ -165,7 +165,7 @@ public class MappingController {
             // Key for Backend: 3849460c9d362f1505737149a6b588ec8f4a1bfa
             // Key for Frontendend: c19840c2b0dcd2f043a0a7d90e85a4f0e1ca95b9
 
-            String apiKey = "3849460c9d362f1505737149a6b588ec8f4a1bfa";
+            String apiKey = "c19840c2b0dcd2f043a0a7d90e85a4f0e1ca95b9";
             String url = "https://www.bibleserver.com/api/parser";
 
             // Parameter zusammenstellen
@@ -202,7 +202,7 @@ public class MappingController {
                         myAnswer.setMessage(result);
                     }
                 } else {
-                    System.out.println("Fehler beim Abrufen der API: HTTP-Code " + responseCode);
+                    myAnswer.setMessage("Fehler beim Abrufen der API: HTTP-Code " + responseCode);
                 }
                 con.disconnect();
             }catch (Exception e){
