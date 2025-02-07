@@ -10,24 +10,15 @@ import com.hszg.demo.model.alexa.ResponseRO;
 import com.hszg.demo.model.game.MessageAnswer;
 import com.hszg.demo.model.game.Game;
 import com.hszg.demo.model.game.Tile;
-import org.apache.http.*;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +50,7 @@ public class MappingController {
         for (Game testGame : games) {
             if (testGame.getGameCode() == game.getGameCode()) {
                 gameAlreadyExists = true;
+                break;
             }
         }
 
@@ -141,6 +133,42 @@ public class MappingController {
             myAnswer.setMessage("cleared Props" );
         }else {
             myAnswer.setMessage("wrong password" );
+        }
+
+        return
+                myAnswer;
+    }
+
+    @PostMapping(
+            path = "/covid",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public MessageAnswer getCovid(@RequestParam("country") String country) {
+
+        Logger myLogger = Logger.getLogger("searchVerseLogger");
+        myLogger.info("Received a POST request on covid with country " + country);
+
+        MessageAnswer myAnswer = new MessageAnswer();
+        PostsThread stopToMuchPosts = new PostsThread();
+
+        if (stopToMuchPosts.getAllowedToPost()){
+            try{
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create("https://covid-193.p.rapidapi.com/statistics?country="+country))
+                        .header("x-rapidapi-key", "8c328768c8msh0a58953ef5d787cp129285jsnc728b320f358")
+                        .header("x-rapidapi-host", "covid-193.p.rapidapi.com")
+                        .method("GET", HttpRequest.BodyPublishers.noBody())
+                        .build();
+                HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+                myAnswer.setMessage(response.body().toString());
+
+            }catch (Exception e){
+                throw new RuntimeException(e);
+            }
+            stopToMuchPosts.start();
+        } else {
+            myAnswer.setMessage("not allowed to post: please wait");
         }
 
         return
