@@ -161,7 +161,7 @@ public class MappingController {
                         .method("GET", HttpRequest.BodyPublishers.noBody())
                         .build();
                 HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-                myAnswer.setMessage(response.body().toString());
+                myAnswer.setAdditionalProperty("Statistics",response.body());
 
             }catch (Exception e){
                 throw new RuntimeException(e);
@@ -240,8 +240,6 @@ public class MappingController {
         } else {
             myAnswer.setMessage("not allowed to post: please wait");
         }
-
-
 
         return
                 myAnswer;
