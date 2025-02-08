@@ -3,6 +3,7 @@ package com.hszg.demo;
 import com.amazonaws.util.IOUtils;
 import com.hszg.demo.data.api.GameManager;
 import com.hszg.demo.data.impl.PropertyFileGameManagerImpl;
+import com.hszg.demo.model.CovidStatistics.Statistics;
 import com.hszg.demo.model.PostsThread;
 import com.hszg.demo.model.alexa.AlexaRO;
 import com.hszg.demo.model.alexa.OutputSpeechRO;
@@ -144,12 +145,12 @@ public class MappingController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseStatus(HttpStatus.OK)
-    public MessageAnswer getCovid(@RequestParam("country") String country) {
+    public Statistics getCovid(@RequestParam("country") String country) {
 
         Logger myLogger = Logger.getLogger("CovidLogger");
         myLogger.info("Received a POST request on covid with country " + country);
 
-        MessageAnswer myAnswer = new MessageAnswer();
+        Statistics statistics = new Statistics();
         PostsThread stopToMuchPosts = new PostsThread();
 
         if (stopToMuchPosts.getAllowedToPost()){
@@ -162,19 +163,19 @@ public class MappingController {
                         .build();
                 HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
-                myAnswer.setAdditionalProperty("Statistics",response.body());
-                myLogger.info(response.body());
+                statistics = Statistics.fromJson(response.body());
+                //myLogger.info(response.body());
 
             }catch (Exception e){
                 throw new RuntimeException(e);
             }
             stopToMuchPosts.start();
         } else {
-            myAnswer.setMessage("not allowed to post: please wait");
+            statistics.setContinent("not allowed to post: please wait");
         }
 
         return
-                myAnswer;
+                statistics;
     }
 
 
