@@ -10,7 +10,6 @@ import com.hszg.demo.model.alexa.ResponseRO;
 import com.hszg.demo.model.game.MessageAnswer;
 import com.hszg.demo.model.game.Game;
 import com.hszg.demo.model.game.Tile;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -147,7 +146,7 @@ public class MappingController {
     @ResponseStatus(HttpStatus.OK)
     public MessageAnswer getCovid(@RequestParam("country") String country) {
 
-        Logger myLogger = Logger.getLogger("searchVerseLogger");
+        Logger myLogger = Logger.getLogger("CovidLogger");
         myLogger.info("Received a POST request on covid with country " + country);
 
         MessageAnswer myAnswer = new MessageAnswer();
@@ -162,8 +161,9 @@ public class MappingController {
                         .method("GET", HttpRequest.BodyPublishers.noBody())
                         .build();
                 HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-                JSONObject jsonObj = new JSONObject(response.body().toString());
-                myAnswer.setAdditionalProperty("Statistics",jsonObj);
+
+                myAnswer.setAdditionalProperty("Statistics",response.body());
+                myLogger.info(response.body());
 
             }catch (Exception e){
                 throw new RuntimeException(e);
