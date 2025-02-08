@@ -151,12 +151,12 @@ public class Statistics {
 
         // Continent
         // {"continent":"North-America",
-        json = json.substring(json.indexOf(":")+1);
-        statistics.setContinent(json.substring(0,json.indexOf(",")));
+        json = json.substring(json.indexOf(":")+2);
+        statistics.setContinent(json.substring(0,json.indexOf(",")-1));
         // Country
         // "country":"Bahamas",
-        json = json.substring(json.indexOf(":")+1);
-        statistics.setCountry(json.substring(0,json.indexOf(",")));
+        json = json.substring(json.indexOf(":")+2);
+        statistics.setCountry(json.substring(0,json.indexOf(",")-1));
         // Population
         // "population":400516,
         json = json.substring(json.indexOf(":")+1);
@@ -177,24 +177,12 @@ public class Statistics {
         json = json.substring(json.indexOf("}"));
         //day
         // "day":"2025-02-08",
-        json = json.substring(json.indexOf(":")+1);
-        statistics.setDay(json.substring(0,json.indexOf(",")));
+        json = json.substring(json.indexOf(":")+2);
+        statistics.setDay(json.substring(0,json.indexOf(",")-1));
         // time
         // "time":"2025-02-08T10:15:05+00:00"}]}
-        json = json.substring(json.indexOf(":")+1);
-        statistics.setTime(json.substring(0,json.indexOf("}")));
-
-        /*json = json.substring(json.indexOf("=")+1);
-        statistics.setSize(Integer.parseInt(json.substring(0,json.indexOf(","))));
-        json = json.substring(json.indexOf("=")+1);
-        json = json.substring(1);
-        String tileSubString = json.substring(0, json.lastIndexOf(",")-1);
-        tileSubString += ",";
-        statistics.setTiles(new ArrayList<Tile>());
-        while (!tileSubString.isEmpty()) {
-            statistics.addTile(Tile.parseTile(tileSubString.substring(0,tileSubString.indexOf(" ")+1)));
-            tileSubString = tileSubString.substring(tileSubString.indexOf(" ")+1);
-        }*/
+        json = json.substring(json.indexOf(":")+2);
+        statistics.setTime(json.substring(0,json.indexOf("}")-1));
         
         return statistics;
     }
