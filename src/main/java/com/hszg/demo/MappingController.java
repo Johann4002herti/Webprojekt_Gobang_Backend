@@ -90,6 +90,35 @@ public class MappingController {
         return game;
     }
 
+    @DeleteMapping("/game")
+    @ResponseStatus(HttpStatus.OK)
+    public MessageAnswer endGame(@RequestParam("GameCode") String gameCode){
+
+        Logger myLogger = Logger.getLogger("SeeBoardLogger");
+        myLogger.info("Received a DELETE request on game with token " + gameCode);
+
+        MessageAnswer myAnswer = new MessageAnswer();
+
+        List<Game> games = propertyFileGameManager.getAllGames();
+        boolean gameExists = false;
+
+        for (Game testGame : games) {
+            if (testGame.getGameCode() == gameCode) {
+                gameExists = true;
+                break;
+            }
+        }
+
+        if (gameExists) {
+            propertyFileGameManager.deleteGame(gameCode);
+            myAnswer.setMessage("Ended Game with Gamecode: " + gameCode );
+        } else{
+            myAnswer.setMessage("Game doesn't exists: no Game ended");
+        }
+
+        return myAnswer;
+    }
+
 
     @PutMapping(
             path = "/game/board/tiles",
