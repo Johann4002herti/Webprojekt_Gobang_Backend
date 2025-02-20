@@ -94,8 +94,8 @@ public class MappingController {
     @ResponseStatus(HttpStatus.OK)
     public MessageAnswer endGame(@RequestParam("GameCode") String gameCode){
 
-        Logger myLogger = Logger.getLogger("SeeBoardLogger");
-        myLogger.info("Received a DELETE request on game with token " + gameCode);
+        Logger myLogger = Logger.getLogger("DeleteGameLogger");
+        myLogger.info("Received a DELETE request on game with gameCode: " + gameCode);
 
         MessageAnswer myAnswer = new MessageAnswer();
 
@@ -104,6 +104,7 @@ public class MappingController {
 
         for (Game testGame : games) {
             if (testGame.getGameCode() == gameCode) {
+                myLogger.info("game exists");
                 gameExists = true;
                 break;
             }
@@ -111,8 +112,11 @@ public class MappingController {
 
         if (gameExists) {
             propertyFileGameManager.deleteGame(gameCode);
+            myLogger.info("game deleted");
+            myLogger.info("gameCode after deletion:"+propertyFileGameManager.getGame(gameCode).getGameCode());
             myAnswer.setMessage("Ended Game with Gamecode: " + gameCode );
         } else{
+            myLogger.info("game not exists");
             myAnswer.setMessage("Game doesn't exists: no Game ended");
         }
 

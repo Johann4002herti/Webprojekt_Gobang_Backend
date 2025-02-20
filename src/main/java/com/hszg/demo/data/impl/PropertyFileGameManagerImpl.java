@@ -163,8 +163,13 @@ public class PropertyFileGameManagerImpl implements GameManager {
         Game g = new Game("Test",15,"Gobang", true);
         PropertyFileGameManagerImpl fileGameManager = getPropertyFileGameManagerImpl("src/main/resources/GameList.properties");
 
-        //fileGameManager.storeGame(g);
         fileGameManager.storeGame(g);
+        System.out.println(fileGameManager.getGame(g.getGameCode()));
+        fileGameManager.deleteGame(g.getGameCode());
+        System.out.println(fileGameManager.getGame(g.getGameCode()));
+
+        //fileGameManager.storeGame(g);
+        /*fileGameManager.storeGame(g);
         Game game = fileGameManager.getGame(g.getGameCode());
         System.out.println(fileGameManager.getGame(g.getGameCode()));
         game.makeMove(0,0);
@@ -173,6 +178,6 @@ public class PropertyFileGameManagerImpl implements GameManager {
         fileGameManager.updateGame(game.getGameCode(),game);
         System.out.println(fileGameManager.getGame(g.getGameCode()));
         fileGameManager.clearProps();
-
+*/
     }
 }
