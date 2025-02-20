@@ -104,7 +104,6 @@ public class MappingController {
 
         for (Game testGame : games) {
             if (testGame.getGameCode().equals(gameCode)) {
-                myLogger.info("game exists");
                 gameExists = true;
                 break;
             }
@@ -112,11 +111,8 @@ public class MappingController {
 
         if (gameExists) {
             propertyFileGameManager.deleteGame(gameCode);
-            myLogger.info("game deleted");
-            myLogger.info("gameCode after deletion:"+propertyFileGameManager.getGame(gameCode).getGameCode());
             myAnswer.setMessage("Ended Game with Gamecode: " + gameCode );
         } else{
-            myLogger.info("game not exists");
             myAnswer.setMessage("Game doesn't exists: no Game ended");
         }
 
@@ -139,8 +135,8 @@ public class MappingController {
         Game localGame = propertyFileGameManager.getGame(gameCode);
         localGame.makeMove(x,y);
 
-        Logger myLogger2 = Logger.getLogger("MMGameLogger");
-        myLogger2.info("Game:" + localGame);
+        /*Logger myLogger2 = Logger.getLogger("MMGameLogger");
+        myLogger2.info("Game:" + localGame);*/
 
         propertyFileGameManager.updateGame(gameCode, localGame);
 
