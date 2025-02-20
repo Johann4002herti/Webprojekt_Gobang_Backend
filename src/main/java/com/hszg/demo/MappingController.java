@@ -49,7 +49,7 @@ public class MappingController {
         boolean gameAlreadyExists = false;
 
         for (Game testGame : games) {
-            if (testGame.getGameCode() == game.getGameCode()) {
+            if (testGame.getGameCode().equals(game.getGameCode())) {
                 gameAlreadyExists = true;
                 break;
             }
@@ -103,7 +103,7 @@ public class MappingController {
         boolean gameExists = false;
 
         for (Game testGame : games) {
-            if (testGame.getGameCode() == gameCode) {
+            if (testGame.getGameCode().equals(gameCode)) {
                 myLogger.info("game exists");
                 gameExists = true;
                 break;
